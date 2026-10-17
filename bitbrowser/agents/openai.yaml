@@ -1,6 +1,0 @@
-interface:
-  display_name: "比特浏览器"
-  short_description: "通过共享 MCP 查询窗口状态，并按明确计划管理指纹、标签和窗口排列"
-  default_prompt: "使用 $bitbrowser 检查比特浏览器在线状态并列出窗口，仅执行只读查询。"
-policy:
-  allow_implicit_invocation: true

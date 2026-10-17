@@ -1,5 +1,0 @@
-{
-  "action": "update",
-  "ids": ["WINDOW_ID"],
-  "changes": {"name": "operations-account", "remark": "Managed account"}
-}

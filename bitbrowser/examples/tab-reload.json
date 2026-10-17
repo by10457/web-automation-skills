@@ -1,5 +1,0 @@
-{
-  "action": "tab-reload",
-  "ids": ["WINDOW_ID"],
-  "targetId": "TAB_TARGET_ID"
-}
