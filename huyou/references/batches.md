@@ -25,13 +25,13 @@ version:3 的 items 各自含唯一 id 和完整 version:2 task，可选 targetI
 以下示例从项目根目录执行，路径按实际布局替换：
 
 ```powershell
-node skills/huyou/scripts/cli.mjs batch-prepare --task workspace/tasks/batch.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs batch-prepare --task workspace/tasks/batch.json --workspace workspace
 # 用上一步返回的 planFile 替换下面的路径
-node skills/huyou/scripts/cli.mjs batch-rehearse --plan workspace/batches/BATCH_ID/plan.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs batch-rehearse --plan workspace/batches/BATCH_ID/plan.json --workspace workspace
 # 用户已明确授权清单中的账号、目标与内容后，执行真实操作
-node skills/huyou/scripts/cli.mjs batch-execute --plan workspace/batches/BATCH_ID/plan.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs batch-execute --plan workspace/batches/BATCH_ID/plan.json --workspace workspace
 # 只核对未确定操作，不重新提交
-node skills/huyou/scripts/cli.mjs batch-reconcile --plan workspace/batches/BATCH_ID/plan.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs batch-reconcile --plan workspace/batches/BATCH_ID/plan.json --workspace workspace
 ```
 
 已有具体授权不重复确认。开发、测试或生成任务清单不意味着授权发送测试内容。

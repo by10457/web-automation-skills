@@ -8,7 +8,7 @@
 2. 调用 configureBrowser(adapter)，注入相同接口。withBrowser(selector,callback) 负责连接、调用及断开，保留原窗口；listTabs 返回 page、targetId、url、title。
 3. 读取与导航直接调用函数传入 Puppeteer 兼容 page，或 withHuyou({page,binding},callback)。调用方负责页面生命周期与同窗口互斥，不自动加锁或断开外部 page。动作计划与批次仍通过浏览器适配器取得窗口。
 
-默认布局为同一父目录下的 skills/huyou 与 bitbrowser-agent-kit；先克隆 https://github.com/by10457/bitbrowser-agent-kit 并在其中运行 node setup.js。其他布局使用上述环境变量或注入接口。纯查询筛选函数和导入本技能不要求比特模块存在。
+默认布局为 web-automation-skills 与 bitbrowser-agent-kit 位于同一父目录，huyou 位于前者内部；先克隆 https://github.com/by10457/bitbrowser-agent-kit 并在其中运行 node setup.js。其他布局使用上述环境变量或注入接口。纯查询筛选函数和导入本技能不要求比特模块存在。
 
 绑定对象：`{browserId,expectedAccountName,expectedCircleName}`，可选 tabUrl。withHuyou 和单项动作的 binding 可直接传对象，或传 workspace/config/huyou-bindings.json 中的绑定名称。直接传入 page 时读取绑定只需要预期账号、圈子；发送动作需要 browserId。
 

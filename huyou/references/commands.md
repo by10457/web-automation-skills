@@ -1,11 +1,11 @@
 # 上下文读取与快照预览
 
-以下示例从项目根目录执行，采用 skills/ 和 workspace/ 布局；路径可替换。查询接口见 [api.md](api.md)，写操作见 [actions.md](actions.md)。
+以下示例从宿主项目根目录执行，采用 web-automation-skills/ 和 workspace/ 布局；路径可替换。查询接口见 [api.md](api.md)，写操作见 [actions.md](actions.md)。
 
 ```powershell
 node bitbrowser-agent-kit/scripts/cli.js windows
-node skills/huyou/scripts/cli.mjs inspect --id WINDOW_ID
-node skills/huyou/scripts/cli.mjs preview --task workspace/tasks/preview.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs inspect --id WINDOW_ID
+node web-automation-skills/huyou/scripts/cli.mjs preview --task workspace/tasks/preview.json --workspace workspace
 ```
 
 inspect 返回账号、圈子和数量。preview 使用 config/huyou-bindings.json 中指定的绑定，保存 task、snapshot、plan、result；仅对已加载列表选候选，不滚动或提交。

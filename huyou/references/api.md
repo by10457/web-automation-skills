@@ -5,7 +5,7 @@
 ## 连接和读取
 
 ```js
-import {withHuyou,queryPosts,resolvePost,getPost} from './skills/huyou/scripts/index.mjs';
+import {withHuyou,queryPosts,resolvePost,getPost} from './web-automation-skills/huyou/scripts/index.mjs';
 const result = await withHuyou(
   {workspace:'./workspace',binding:'my-circle'},
   ({page,binding}) => queryPosts(page,binding,{limit:10,maxLoads:10})

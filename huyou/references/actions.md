@@ -3,13 +3,13 @@
 以下示例从项目根目录执行，采用 skills/ 和 workspace/ 布局；路径按实际位置替换。输出统一为 JSON；正常退出 0，参数/上下文错误退出 1，提交不确定或历史 pending 阻止执行退出 2。
 
 ```powershell
-node skills/huyou/scripts/cli.mjs comments --binding my-circle --post POST_ID --workspace workspace
-node skills/huyou/scripts/cli.mjs prepare --task workspace/tasks/my-comment.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs comments --binding my-circle --post POST_ID --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs prepare --task workspace/tasks/my-comment.json --workspace workspace
 # 使用返回的 planFile（plan.json，不是 result.json）：
-node skills/huyou/scripts/cli.mjs rehearse --plan workspace/runs/huyou/RUN_ID/plan.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs rehearse --plan workspace/runs/huyou/RUN_ID/plan.json --workspace workspace
 # 仅当用户已授权这项具体操作：
-node skills/huyou/scripts/cli.mjs execute --plan workspace/runs/huyou/RUN_ID/plan.json --workspace workspace
-node skills/huyou/scripts/cli.mjs reconcile --plan workspace/runs/huyou/RUN_ID/plan.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs execute --plan workspace/runs/huyou/RUN_ID/plan.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.mjs reconcile --plan workspace/runs/huyou/RUN_ID/plan.json --workspace workspace
 ```
 
 ## 任务格式
@@ -65,8 +65,8 @@ POST_ID、COMMENT_AUTHOR、COMMENT_TEXT 和 my-circle 均为占位符，运行�
 
 ## 验证
 
-纯单元测试：`node --test bitbrowser-agent-kit/tests/*.test.js skills/huyou/tests/*.test.mjs`。
+纯单元测试：`node --test bitbrowser-agent-kit/tests/*.test.js web-automation-skills/huyou/tests/*.test.mjs`。
 
-离线浏览器测试：`node skills/huyou/tests/browser.mjs --id 已运行窗口ID`。会创建隔离浏览器上下文，所有请求都由本地夹具应答或拦截；不使用真实登录数据、不提交网站内容，结束关闭该上下文并保留原窗口。
+离线浏览器测试：`node web-automation-skills/huyou/tests/browser.mjs --id 已运行窗口ID`。会创建隔离浏览器上下文，所有请求都由本地夹具应答或拦截；不使用真实登录数据、不提交网站内容，结束关闭该上下文并保留原窗口。
 
 发布支持 publication.board 指定页面实际存在的分区名称。页面列出分区但没有选中时，prepare 返回 BOARD_REQUIRED，必须选择后才能提交；提交前重新核对分区。

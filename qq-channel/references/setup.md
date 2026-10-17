@@ -1,6 +1,6 @@
 # 接入
 
-Node.js 版本见 package.json。本包没有运行时第三方依赖；默认使用与 skills 仓库同一父目录的 bitbrowser-agent-kit 提供 Puppeteer 页面。先克隆 https://github.com/by10457/bitbrowser-agent-kit 并在其目录执行 node setup.js，依赖由该项目管理；其他布局设置 QQ_CHANNEL_BROWSER_MODULE 为其 scripts/index.js 的绝对路径。整个 qq-channel 文件夹可移动，不依赖原父目录名称。
+Node.js 版本见 package.json。本包没有运行时第三方依赖；默认使用与 web-automation-skills 仓库同一父目录的 bitbrowser-agent-kit 提供 Puppeteer 页面。先克隆 https://github.com/by10457/bitbrowser-agent-kit 并在其目录执行 node setup.js，依赖由该项目管理；其他布局设置 QQ_CHANNEL_BROWSER_MODULE 为其 scripts/index.js 的绝对路径。整个 qq-channel 文件夹可移动，不依赖原父目录名称。
 
 浏览器适配器可通过 `configureBrowser({withBrowser,listTabs})` 注入，或把 QQ_CHANNEL_BROWSER_MODULE 设置为适配器入口的绝对路径。withBrowser(selector,callback) 连接并最终断开，但不关闭用户窗口；listTabs(browser) 返回含 page、targetId、url 的数组。
 

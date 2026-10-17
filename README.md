@@ -1,10 +1,20 @@
-# browser-ops-skills
+# web-automation-skills
 
-基于比特浏览器的多窗口、多账号社交平台自动化运营技能集，供 AI Agent 和 Node.js 程序调用。
+面向 AI Agent 的网页自动化技能集：将网站知识、页面解析、基础动作和可组合业务脚本提前封装，让 Agent 复用经过验证的能力，专注于目标选择、内容生成与任务编排。
 
 项目把浏览器窗口管理与平台操作拆成独立技能：比特浏览器负责窗口与连接，平台技能负责页面读取、账号核对、内容操作及执行结果核对。本仓库包含 **狐友社区** 和 **QQ 频道论坛**；比特浏览器核心已迁至独立仓库 **bitbrowser-agent-kit**，后续可按相同结构扩展其他平台。
 
-> 项目仓库：[by10457/browser-ops-skills](https://github.com/by10457/browser-ops-skills)。
+> 项目仓库：[by10457/web-automation-skills](https://github.com/by10457/web-automation-skills)。
+
+## 分工与使用目标
+
+- **bitbrowser-agent-kit**：管理浏览器环境、连接和标签，提供 windowId、targetId 等浏览器信息。
+- **本项目**：识别网站账号与页面上下文，读取帖子和评论，执行网站导航及已授权动作。当前通过 CLI / JS 调用，尚无统一的网站 MCP 服务。
+- **调用方 Agent**：理解业务要求，选择候选内容、构思评论，再把明确的目标与正文交给脚本。日常使用优先调用公开接口，不重新分析 DOM 或编写浏览器控制层。
+
+典型流程：查询候选帖子 → 检查查询范围和完整性 → 确定目标及评论正文 → 准备操作计划 → 执行与核对 → 输出逐项结果。windowId 是浏览器环境 ID，targetId 是标签 ID，postId/commentId 是网站内容 ID，三者不可互换。
+
+现有狐友批次可接收明确目标和正文；跨平台统一的查询快照、随机抽样和业务流程入口仍是后续规划，不把示例业务需求当作已经实现的命令。
 
 ## 当前能力
 
@@ -34,7 +44,7 @@
 ```text
 workspace/
 ├── bitbrowser-agent-kit/  # 独立克隆的浏览器核心、MCP 和 Skill
-└── skills/                # 本仓库
+└── web-automation-skills/ # 本仓库
     ├── README.md
     ├── qq-channel/        # QQ 频道论坛技能
     └── huyou/             # 狐友技能
@@ -57,14 +67,14 @@ mkdir browser-ops-workspace
 cd browser-ops-workspace
 npm init -y
 npm install --save-exact puppeteer-core@25.11.0
-git clone https://github.com/by10457/browser-ops-skills.git skills
+git clone https://github.com/by10457/web-automation-skills.git web-automation-skills
 git clone https://github.com/by10457/bitbrowser-agent-kit.git
 node bitbrowser-agent-kit/setup.js
 
 node -e "require('node:fs').mkdirSync('workspace/config', { recursive: true })"
 ```
 
-后续命令均从宿主项目根目录执行。bitbrowser 已独立为共享核心与 MCP 包，首次接入额外运行 `npm --prefix bitbrowser-agent-kit ci`；其他站点技能继续使用宿主依赖。已有宿主项目时可直接安装依赖并放入技能，无需重新初始化。将 bitbrowser-agent-kit 与本仓库 skills 放在同一父目录即可使用默认适配器；其他布局请设置 HUYOU_BROWSER_MODULE / QQ_CHANNEL_BROWSER_MODULE 为独立项目 scripts/index.js 的绝对路径。
+后续命令均从宿主项目根目录执行。bitbrowser 已独立为共享核心与 MCP 包，首次接入额外运行 `npm --prefix bitbrowser-agent-kit ci`；其他站点技能继续使用宿主依赖。已有宿主项目时可直接安装依赖并放入技能，无需重新初始化。将 bitbrowser-agent-kit 与本仓库 web-automation-skills 放在同一父目录即可使用默认适配器；其他布局请设置 HUYOU_BROWSER_MODULE / QQ_CHANNEL_BROWSER_MODULE 为独立项目 scripts/index.js 的绝对路径。
 
 ### 2. 检查比特浏览器
 
@@ -105,8 +115,8 @@ node bitbrowser-agent-kit/scripts/cli.js tabs --id '替换为真实窗口ID'
 ### 4. 验证上下文并查询
 
 ```sh
-node skills/huyou/scripts/cli.mjs diagnose --binding account-a --workspace ./workspace
-node skills/huyou/scripts/cli.mjs query --binding account-a --workspace ./workspace
+node web-automation-skills/huyou/scripts/cli.mjs diagnose --binding account-a --workspace ./workspace
+node web-automation-skills/huyou/scripts/cli.mjs query --binding account-a --workspace ./workspace
 ```
 
 查询条件和任务格式见 [狐友示例](huyou/examples) 与 [查询接口](huyou/references/api.md)。如果一个窗口里有多个匹配的平台标签页，需要通过相应接口指定 `targetId`，CLI 使用 `--target`。

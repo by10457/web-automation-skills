@@ -1,0 +1,5 @@
+# 本地设计、调试和验收档案，不作为公开运行依赖。
+/.local-development/
+node_modules/
+coverage/
+*.tgz
