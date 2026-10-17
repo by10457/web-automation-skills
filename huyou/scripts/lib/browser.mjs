@@ -6,7 +6,7 @@ export function configureBrowser(adapter){if(typeof adapter?.withBrowser!=='func
 async function adapter(){
   if(configured)return configured;
   const source=process.env.HUYOU_BROWSER_MODULE;
-  try{return await import(source?pathToFileURL(path.resolve(source)).href:new URL('../../../bitbrowser/scripts/index.mjs',import.meta.url).href);}
+  try{return await import(source?pathToFileURL(path.resolve(source)).href:new URL('../../../bitbrowser/scripts/index.js',import.meta.url).href);}
   catch{throw new SkillError('BROWSER_DEPENDENCY_MISSING','配置 HUYOU_BROWSER_MODULE 为浏览器技能入口路径，或调用 configureBrowser');}
 }
 export const withBrowser=async(...args)=>(await adapter()).withBrowser(...args);

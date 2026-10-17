@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+*.tgz
+.state/
+
+# 本地开发档案：调试、验收、历史设计与清理前文档，不发布。
+/.local-development/

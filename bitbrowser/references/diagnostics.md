@@ -13,9 +13,9 @@
 创建有记录中的 ID 且名称匹配时才能确认当前结果；仅发现同名窗口仍为 unknown。启动、关闭、删除和修改字段按当前状态核对。清理、访问和标签操作不根据瞬时状态推断历史成功，返回 unknown 并保留 recordedStatus。页面可能重新生成缓存，窗口和标签也可能被人工改变。
 
 ```powershell
-node scripts/cli.mjs doctor
-node scripts/cli.mjs doctor --id WINDOW_ID
-node scripts/cli.mjs inspect-operation --plan PLAN_FILE --workspace WORKSPACE_DIRECTORY
+node scripts/cli.js doctor
+node scripts/cli.js doctor --id WINDOW_ID
+node scripts/cli.js inspect-operation --plan PLAN_FILE --workspace WORKSPACE_DIRECTORY
 ```
 
 限流只读查询最多退避重试 3 次；写入请求不自动重试。COORDINATION_BUSY 表示共享请求锁等待超时；检查协调目录锁文件中的进程是否仍然运行，无法确认时停止，不自动抢占锁。API 超时后的写入结果必须先核对。

@@ -3,18 +3,20 @@
 从 skill 目录执行：
 
 ```powershell
-node scripts/cli.mjs health
-node scripts/cli.mjs windows
-node scripts/cli.mjs tabs --name WINDOW_NAME
-node scripts/cli.mjs tabs --id WINDOW_ID
+node scripts/cli.js health
+node scripts/cli.js windows
+node scripts/cli.js displays
+node scripts/cli.js state --id WINDOW_ID
+node scripts/cli.js tabs --name WINDOW_NAME
+node scripts/cli.js tabs --id WINDOW_ID
 ```
 
 stdout 成功返回 `{ok:true,data:...}`；失败 stderr 返回 `{ok:false,error:{code,message}}` 并退出 1。窗口列表仅保留 id/name/seq/running。标签页 ID 是本次运行 targetId，不是持久配置 ID。调试连接地址不持久化。
 
-调用方通过实际文件路径导入比特技能，puppeteer-core 由项目根目录提供：
+调用方通过实际文件路径导入比特技能，依赖在 bitbrowser 目录使用 npm ci 安装：
 
 ```js
-import { withBrowser, listTabs, selectTab } from './skills/bitbrowser/scripts/index.mjs';
+import { withBrowser, listTabs, selectTab } from './skills/bitbrowser/scripts/index.js';
 await withBrowser({ id: browserId }, async (browser, window) => {
   const tab = selectTab(await listTabs(browser), { origin: 'https://example.com' });
   return { window, title: await tab.page.title() };

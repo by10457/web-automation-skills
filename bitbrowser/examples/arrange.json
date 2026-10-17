@@ -1,0 +1,17 @@
+{
+  "action": "arrange",
+  "ids": ["WINDOW_ID"],
+  "layout": {
+    "type": "box",
+    "startX": 0,
+    "startY": 0,
+    "width": 500,
+    "height": 400,
+    "col": 2,
+    "spaceX": 0,
+    "spaceY": 0,
+    "offsetX": 30,
+    "offsetY": 30,
+    "orderBy": "asc"
+  }
+}

@@ -65,7 +65,7 @@ POST_ID、COMMENT_AUTHOR、COMMENT_TEXT 和 my-circle 均为占位符，运行�
 
 ## 验证
 
-纯单元测试：`node --test skills/bitbrowser/tests/*.test.mjs skills/huyou/tests/*.test.mjs`。
+纯单元测试：`node --test skills/bitbrowser/tests/*.test.js skills/huyou/tests/*.test.mjs`。
 
 离线浏览器测试：`node skills/huyou/tests/browser.mjs --id 已运行窗口ID`。会创建隔离浏览器上下文，所有请求都由本地夹具应答或拦截；不使用真实登录数据、不提交网站内容，结束关闭该上下文并保留原窗口。
 

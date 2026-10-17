@@ -8,6 +8,8 @@
 
 ## 当前能力
 
+仅接入比特浏览器时，无需先配置站点技能。新电脑准备 Node.js >=22.12（含 npm）、Codex CLI 和已启用本地 API 的比特浏览器；克隆本仓库后，在仓库根目录运行 `node bitbrowser/setup.js`，安装依赖并接入 Skill/MCP。也可以让 Codex 阅读 [首次接入入口](bitbrowser/AGENTS.md) 后完成初始化。重复运行保留已有配置，默认验证仅查询在线状态和窗口列表。详见 [比特浏览器项目说明](bitbrowser/README.md) 和 [接入参数](bitbrowser/references/setup.md)。
+
 | 模块 | 状态 | 能力 |
 | --- | --- | --- |
 | [bitbrowser](bitbrowser/SKILL.md) | 已实现 | 本地服务诊断、窗口查询与数量检查、创建/启动/关闭/删除窗口、清理 Cookie 或缓存、修改名称与备注、打开网页、标签页管理及浏览器连接 |
@@ -71,14 +73,14 @@ git clone https://github.com/by10457/browser-ops-skills.git skills
 node -e "require('node:fs').mkdirSync('workspace/config', { recursive: true })"
 ```
 
-后续命令均从宿主项目根目录执行，依赖也安装在该目录，不要在任何技能目录内安装 `node_modules`。已有宿主项目时可直接安装依赖并放入技能，无需重新初始化。平台技能与 bitbrowser 相邻存放时无需额外设置适配器环境变量；分开放置时参见各技能的接入说明。
+后续命令均从宿主项目根目录执行。bitbrowser 已独立为共享核心与 MCP 包，首次接入额外运行 `npm --prefix skills/bitbrowser ci`；其他站点技能继续使用宿主依赖。已有宿主项目时可直接安装依赖并放入技能，无需重新初始化。平台技能与 bitbrowser 相邻存放时无需额外设置适配器环境变量；分开放置时参见各技能的接入说明。
 
 ### 2. 检查比特浏览器
 
 ```sh
-node skills/bitbrowser/scripts/cli.mjs health
-node skills/bitbrowser/scripts/cli.mjs doctor
-node skills/bitbrowser/scripts/cli.mjs windows
+node skills/bitbrowser/scripts/cli.js health
+node skills/bitbrowser/scripts/cli.js doctor
+node skills/bitbrowser/scripts/cli.js windows
 ```
 
 默认本地 API 地址为 `http://127.0.0.1:54345`。如本机使用其他端口，可设置 `BITBROWSER_API_URL`。窗口 ID 以查询结果为准，窗口名称和序号不能替代 ID。
@@ -86,7 +88,7 @@ node skills/bitbrowser/scripts/cli.mjs windows
 在比特浏览器中启动所需窗口，打开狐友网页并完成登录。已有窗口的标签页可这样查询：
 
 ```sh
-node skills/bitbrowser/scripts/cli.mjs tabs --id '替换为真实窗口ID'
+node skills/bitbrowser/scripts/cli.js tabs --id '替换为真实窗口ID'
 ```
 
 ### 3. 配置狐友账号绑定

@@ -3,7 +3,7 @@
 以下示例从项目根目录执行，采用 skills/ 和 workspace/ 布局；路径可替换。查询接口见 [api.md](api.md)，写操作见 [actions.md](actions.md)。
 
 ```powershell
-node skills/bitbrowser/scripts/cli.mjs windows
+node skills/bitbrowser/scripts/cli.js windows
 node skills/huyou/scripts/cli.mjs inspect --id WINDOW_ID
 node skills/huyou/scripts/cli.mjs preview --task workspace/tasks/preview.json --workspace workspace
 ```

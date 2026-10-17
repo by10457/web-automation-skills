@@ -1,14 +1,30 @@
 {
   "name": "bitbrowser-skill",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./scripts/index.mjs",
-    "./cli-utils": "./scripts/lib/cli.mjs"
+    ".": "./src/index.js",
+    "./cli-utils": "./adapters/cli/helpers.js"
+  },
+  "bin": {
+    "bitbrowser": "./scripts/cli.js",
+    "bitbrowser-mcp": "./adapters/mcp/stdio.js"
+  },
+  "scripts": {
+    "setup": "node setup.js",
+    "test": "node scripts/test.js",
+    "check": "node scripts/check.js",
+    "format": "prettier --write setup.js src adapters scripts tests",
+    "mcp": "node adapters/mcp/stdio.js"
   },
   "dependencies": {
-    "puppeteer-core": "25.11.0"
+    "puppeteer-core": "25.11.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
   },
   "engines": {
     "node": ">=22.12.0"

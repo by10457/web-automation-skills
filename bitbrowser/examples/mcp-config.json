@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "bitbrowser": {
+      "command": "node",
+      "args": ["/absolute/path/to/bitbrowser/adapters/mcp/stdio.js"],
+      "env": {
+        "BITBROWSER_API_URL": "http://127.0.0.1:54345",
+        "BITBROWSER_STATE_DIR": "/absolute/path/to/bitbrowser-state",
+        "BITBROWSER_COORDINATION_DIR": "/absolute/path/to/shared-bitbrowser-coordination"
+      }
+    }
+  }
+}
