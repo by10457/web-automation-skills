@@ -34,7 +34,7 @@ API 默认地址为 `http://127.0.0.1:54345`，其他端口通过 `BITBROWSER_AP
 
 ## 任务目录与绑定
 
-按照[任务工作空间约定](../docs/workspaces.md)，在仓库外创建 `workspace-my-task`，设置其 `config/storage.json` 平台映射，然后将以下配置保存为 `workspace-my-task/huyou/config/huyou-bindings.json`：
+按照[任务工作空间约定](../docs/workspaces.md)，在仓库外为本次独立任务创建 `workspace-<任务短名>-<唯一标识>`，禁止使用裸 workspace 或复用其他对话目录。设置其 `config/storage.json` 平台映射，然后将以下配置保存到该任务目录的 `huyou/config/huyou-bindings.json`：
 
 ```json
 {
@@ -50,11 +50,11 @@ API 默认地址为 `http://127.0.0.1:54345`，其他端口通过 `BITBROWSER_AP
 }
 ```
 
-在对应窗口打开狐友并登录后，核对页面账号、圈子和标签：
+在对应窗口打开狐友并登录后，核对页面账号、圈子和标签。以下路径为示例，必须替换为本任务生成并保存的真实路径，不能照抄标识：
 
 ```sh
-node web-automation-skills/huyou/scripts/cli.js diagnose --binding account-a --workspace ./workspace-my-task
-node web-automation-skills/huyou/scripts/cli.js query --binding account-a --workspace ./workspace-my-task
+node web-automation-skills/huyou/scripts/cli.js diagnose --binding account-a --workspace ./workspace-campus-ops-20261019-a3f82c91
+node web-automation-skills/huyou/scripts/cli.js query --binding account-a --workspace ./workspace-campus-ops-20261019-a3f82c91
 ```
 
 多个账号配置不同绑定条目。存在多个狐友标签时显式指定 `--target`。workspace 始终传任务根目录；没有平台映射时绑定默认位于根目录的 `config/huyou-bindings.json`。
