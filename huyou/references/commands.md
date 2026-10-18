@@ -4,8 +4,8 @@
 
 ```powershell
 node bitbrowser-agent-kit/scripts/cli.js windows
-node web-automation-skills/huyou/scripts/cli.mjs inspect --id WINDOW_ID
-node web-automation-skills/huyou/scripts/cli.mjs preview --task workspace/tasks/preview.json --workspace workspace
+node web-automation-skills/huyou/scripts/cli.js inspect --id WINDOW_ID
+node web-automation-skills/huyou/scripts/cli.js preview --task workspace/tasks/preview.json --workspace workspace
 ```
 
 inspect 返回账号、圈子和数量。preview 使用 config/huyou-bindings.json 中指定的绑定，保存 task、snapshot、plan、result；仅对已加载列表选候选，不滚动或提交。

@@ -1,11 +1,13 @@
 # 给调用方 Agent 的公开接口
 
-使用 Node.js 22.12+。以文件路径/file URL 导入 huyou/scripts/index.mjs；浏览器模块及外部 page 接入见 [接入说明](setup.md)。公开接口由 index.mjs 导出，不依赖 lib 内部路径。
+查询抽样、固定评论、批次执行和文件交接可使用新增的 `createPostWorkflow`，详细参数见 [帖子互动工作流](post-workflow.md)。实现及专用 CLI 使用普通 `.js`；本文件下方原接口保持兼容。
+
+使用 Node.js 22.12+。以文件路径/file URL 导入 huyou/scripts/index.js；浏览器模块及外部 page 接入见 [接入说明](setup.md)。公开接口由 index.js 导出，不依赖 lib 内部路径。
 
 ## 连接和读取
 
 ```js
-import {withHuyou,queryPosts,resolvePost,getPost} from './web-automation-skills/huyou/scripts/index.mjs';
+import {withHuyou,queryPosts,resolvePost,getPost} from './web-automation-skills/huyou/scripts/index.js';
 const result = await withHuyou(
   {workspace:'./workspace',binding:'my-circle'},
   ({page,binding}) => queryPosts(page,binding,{limit:10,maxLoads:10})
@@ -62,7 +64,7 @@ prepare 参数与 version:2 task 字段对应，另有 workspace、targetId；�
 
 ## CLI 对应关系
 
-前缀 `node <技能路径>/scripts/cli.mjs`，不要求当前目录是某个固定磁盘目录：
+前缀 `node <技能路径>/scripts/cli.js`，不要求当前目录是某个固定磁盘目录：
 
 ```text
 query --binding NAME --query QUERY_JSON --workspace DIR [--target TAB_ID]

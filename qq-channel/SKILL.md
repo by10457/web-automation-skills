@@ -5,7 +5,7 @@ description: 读取腾讯 QQ 频道的论坛频道、帖子版块、帖子及评
 
 # QQ 频道论坛操作
 
-Agent 决定目标、内容与操作范围，使用本包的函数执行。公开入口为 `scripts/index.mjs`；命令行入口为 `scripts/cli.mjs`。本技能不生成运营文案，不安排定时任务。
+Agent 决定目标、内容与操作范围，使用本包的函数执行。公开入口为 `scripts/index.js`；命令行入口为 `scripts/cli.js`。本技能不生成运营文案，不安排定时任务。
 
 ## 接入与定位
 

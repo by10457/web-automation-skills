@@ -1,6 +1,6 @@
 # 接口
 
-全部接口从 scripts/index.mjs 导入，浏览器操作为异步函数。常规读取方式：
+全部接口从 scripts/index.js 导入，浏览器操作为异步函数。常规读取方式：
 
 ```js
 await withQQChannel({workspace,binding,targetId}, async ({page,binding}) => {
@@ -55,6 +55,6 @@ const result = await executeInteraction({workspace,targetId,plan,mode:'execute'}
 
 ## CLI
 
-`node <skill>/scripts/cli.mjs <command> --input request.json [--output result.json]`
+`node <skill>/scripts/cli.js <command> --input request.json [--output result.json]`
 
 命令见 `--help`。请求 JSON 含 workspace、binding、targetId；posts 的条件放 query，select-view 的名称放 view，post 的地址放 url。prepare 的动作字段与函数一致。execute / reconcile 使用 plan 对象或 planFile 路径，命令明确决定执行或仅核对。没有默认发送命令。

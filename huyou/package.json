@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./scripts/index.mjs"
+    ".": "./scripts/index.js"
   },
   "engines": {
     "node": ">=22.12.0"

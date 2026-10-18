@@ -1,6 +1,6 @@
 # 上下文、导航与完整性
 
-所有函数从 scripts/index.mjs 导出。page 参数需要 Puppeteer 兼容页面；不会直接接受其他工具的 Tab 句柄。
+所有函数从 scripts/index.js 导出。page 参数需要 Puppeteer 兼容页面；不会直接接受其他工具的 Tab 句柄。
 
 | 函数 | 参数与结果 |
 |---|---|

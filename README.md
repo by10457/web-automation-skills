@@ -14,7 +14,9 @@
 
 典型流程：查询候选帖子 → 检查查询范围和完整性 → 确定目标及评论正文 → 准备操作计划 → 执行与核对 → 输出逐项结果。windowId 是浏览器环境 ID，targetId 是标签 ID，postId/commentId 是网站内容 ID，三者不可互换。
 
-现有狐友批次可接收明确目标和正文；跨平台统一的查询快照、随机抽样和业务流程入口仍是后续规划，不把示例业务需求当作已经实现的命令。
+狐友已提供[查询快照 → 随机抽样 → 固定评论清单 → 批次执行 → 文件交接](huyou/references/post-workflow.md)的 JS/CLI 入口，复用原有动作引擎。跨平台统一工作流仍是后续规划。
+
+仅需采集和生成评论草稿时，使用[双窗口只读交接流程](huyou/references/readonly-handoff.md)：复用浏览器标签快照，并行采集各窗口帖子，独立抽样，通过 `createCommentBrief` 绑定评论引用，再由 `exportReadOnlyHandoff` 输出完整文件。评论从初稿就保留 `itemRef`，逐条核对原帖主题；该流程不提交点赞或评论。
 
 ## 当前能力
 
@@ -29,7 +31,19 @@
 
 多账号任务通过“浏览器窗口 ID + 预期账号 + 平台上下文”区分操作对象。当前项目复用窗口中已有的登录状态，**不包含自动注册或通用自动登录功能**；遇到登录失效，需要先在对应窗口完成登录。
 
+## 离线验证
+
+在仓库根目录运行以下命令，使用模拟数据验证公共函数与操作边界，不连接真实业务窗口：
+
+```sh
+node --test huyou/tests/*.test.js qq-channel/tests/*.test.js
+```
+
+开发与实机验收档案保存在被 Git 忽略的 `.local-development/`，不作为运行依赖或随仓库发布。
+
 ## 工作方式
+
+需要定期重复的业务，优先写一次可导入函数的宿主 JS 脚本：采集快照 → AI 生成评论 → 固定任务 → 执行原计划。狐友的[可重复业务脚本说明](huyou/references/reusable-business.md)提供最新帖子采集、两组独立抽样及批次构造函数。定时触发由调用方安排，不需要为此新增 MCP。当前源码统一使用带中文注释的普通 `.js`，由各技能的 `type:module` 启用 ESM；旧调用方需同步更新导入路径和命令，公开函数名称保留。
 
 1. 检查比特浏览器本地服务，获取真实窗口 ID 和运行状态。
 2. 准备所需窗口，在各窗口登录相应账号。
@@ -115,8 +129,8 @@ node bitbrowser-agent-kit/scripts/cli.js tabs --id '替换为真实窗口ID'
 ### 4. 验证上下文并查询
 
 ```sh
-node web-automation-skills/huyou/scripts/cli.mjs diagnose --binding account-a --workspace ./workspace
-node web-automation-skills/huyou/scripts/cli.mjs query --binding account-a --workspace ./workspace
+node web-automation-skills/huyou/scripts/cli.js diagnose --binding account-a --workspace ./workspace
+node web-automation-skills/huyou/scripts/cli.js query --binding account-a --workspace ./workspace
 ```
 
 查询条件和任务格式见 [狐友示例](huyou/examples) 与 [查询接口](huyou/references/api.md)。如果一个窗口里有多个匹配的平台标签页，需要通过相应接口指定 `targetId`，CLI 使用 `--target`。

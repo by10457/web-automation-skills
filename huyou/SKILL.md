@@ -5,7 +5,7 @@ description: 查询狐友圈子帖子、评论和用户主页，执行点赞、�
 
 # 狐友圈子操作
 
-使用封装函数完成页面读取与操作，由调用方决定目标、内容和执行范围。公开入口为 `scripts/index.mjs`，命令行入口为 `scripts/cli.mjs`。
+使用封装函数完成页面读取与操作，由调用方决定目标、内容和执行范围。公开入口为 `scripts/index.js`，命令行入口为 `scripts/cli.js`。
 
 ## 准备环境
 
@@ -20,6 +20,7 @@ description: 查询狐友圈子帖子、评论和用户主页，执行点赞、�
 | 加载更多、回顶部、刷新 | loadMore、backToTop、refreshFeed | 不覆盖已有草稿 |
 | 帖子点赞、评论、回复、评论点赞、发布 | 对应 prepare 函数和动作函数 | [单项操作](references/actions.md) |
 | 多目标、多窗口任务 | prepareBatch、runBatch | [批次操作](references/batches.md) |
+| 查询后随机抽样、固定评论并逐帖点赞评论 | createPostWorkflow / workflow-cli.js | [帖子互动工作流](references/post-workflow.md) |
 | 上下文与就绪检查 | inspect、diagnoseHuyou | [扩展读取与导航](references/reading.md) |
 | 圈子及排序导航 | listCircles、selectCircle、setFeedSort | [扩展读取与导航](references/reading.md) |
 | 评论分页与定位 | queryComments、loadMoreComments、resolveComment | [扩展读取与导航](references/reading.md) |
@@ -29,7 +30,13 @@ description: 查询狐友圈子帖子、评论和用户主页，执行点赞、�
 
 ## 执行流程
 
+双窗口只读采集及评论交接优先使用[精简只读流程](references/readonly-handoff.md)。每窗首次 MCP list_tabs 后保存 snapshotId，使用浏览器项目的 exportHandoff 从服务端快照生成 ID/URL 输入，避免手抄；同任务无相关变化时复用引用，不反复 list_tabs。评论编写用 createCommentBrief，交接用 exportReadOnlyHandoff；不要自写字段拼接器。逐字依据校验不代替语义审查：不编造个人意愿、图片观感、活动背景或未经证实的评价。
+
+需要可重复业务脚本时，优先导入公开函数，见[分阶段业务脚本](references/reusable-business.md)：`collectLatestPosts` 采集，`selectIndependentPosts` 分别抽样点赞和评论，AI 填写正文后 `buildIndependentBatch` 构造原生批次，复用 prepareBatch/runBatch。数量按窗口计算，多个账号的总量由业务配置明确。脚本和定时触发由宿主保存，不必新增 MCP 或 CLI。重试读取原计划与固定正文，不重复抽样。
+
 新任务优先使用统一的 prepareInteraction/executeInteraction；批量帖子、作者去重、执行历史和页面恢复见 [通用编排](references/orchestration.md)。旧函数继续兼容。不要导入 lib 内部点击函数绕过操作日志和核对。
+
+需要对同一组帖子逐帖点赞并评论时，使用 createPostWorkflow 工作流入口，不重写抽样或批次代码。Agent 仅提供查询条件、抽样数量和 `{itemRef,text}` 评论映射；复用返回的引用参数。独立选择两组目标则使用上方业务函数。`run` 必须显式选择模式，实机执行依赖具体业务授权；开发和离线测试不是发送授权。交接直接复用生成的 `finalResponse` 文件链接。
 
 1. diagnoseHuyou 检查登录、圈子与草稿；必要时通过导航函数选择目标圈子和新发排序。查询目标，检查 complete、stopReason 和 warnings；有歧义时补充条件，不任取第一条。
 2. prepare 生成包含账号、目标和正文的计划，有效期 15 分钟。

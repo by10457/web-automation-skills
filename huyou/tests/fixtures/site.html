@@ -1,27 +1,232 @@
-<!doctype html><meta charset="utf-8"><title>狐友离线测试夹具</title>
-<style>body{font-family:sans-serif}.modal-root{position:fixed;inset:40px;background:white;border:1px solid;padding:10px;overflow:auto}textarea,[contenteditable]{min-height:50px;border:1px solid}button{margin:3px}img{width:20px;height:20px}</style>
-<div class="app-header__actions"><img class="app-header__avatar" alt="operator" src="https://fixture.invalid/me.png"></div>
-<a class="nav-item" href="/">首页</a><a class="nav-item" href="/publish">发布</a><main></main>
+<!doctype html>
+<meta charset="utf-8" />
+<title>狐友离线测试夹具</title>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+
+  .modal-root {
+    position: fixed;
+    inset: 40px;
+    background: white;
+    border: 1px solid;
+    padding: 10px;
+    overflow: auto;
+  }
+
+  textarea,
+  [contenteditable] {
+    min-height: 50px;
+    border: 1px solid;
+  }
+
+  button {
+    margin: 3px;
+  }
+
+  img {
+    width: 20px;
+    height: 20px;
+  }
+</style>
+<div class="app-header__actions">
+  <img
+    class="app-header__avatar"
+    alt="operator"
+    src="https://fixture.invalid/me.png"
+  />
+</div>
+<a class="nav-item" href="/">首页</a
+><a class="nav-item" href="/publish">发布</a>
+<main></main>
 <script>
-// Offline fixture; every request is intercepted in an isolated browser context.
-const esc=x=>String(x).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
-const state={comments:[{name:'reader',avatar:'reader.png',text:'测试目标评论',liked:false,count:0,replies:[]}],posts:[{id:'123',name:'author',avatar:'author.png',text:'测试帖子'}],statement:'添加内容类型声明',reply:null,mode:'normal',submits:0};
-window.fixture=state;
-const main=document.querySelector('main');
-function card(p){return `<div data-feed-id="${p.id}"><div class="feed-card"><div class="feed-header"><span class="feed-header__name">${esc(p.name)}</span><img class="feed-header__avatar" src="https://fixture.invalid/${p.avatar}"><span class="feed-header__meta">刚刚</span></div><div class="feed-card__body"><div class="feed-rich-text">${esc(p.text)}</div></div><div class="feed-footer__actions"><button data-open="${p.id}"><img alt="评论"></button></div></div></div>`;}
-function home(){main.innerHTML=`<button class="main-header__tab--active">圈子</button><button class="main-header__circle--active"><span class="main-header__circle-name">circle</span></button><h3 class="circle-info-card__name">circle</h3><button class="circle-tab__sort">新发</button><div class="feed-list">${state.posts.map(card).join('')}</div>`;main.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>detail(b.dataset.open));}
-function comment(c,isReply=false){return `<div class="comment-item"><img class="comment-item__avatar" src="https://fixture.invalid/${c.avatar}"><div class="comment-item__body"><span class="comment-item__name">${esc(c.name)}</span><span class="comment-item__time">刚刚</span><div class="comment-item__content-text"><div class="feed-rich-text">${esc(c.text)}</div></div><div class="comment-item__actions"><button aria-label="${c.liked?'取消评论点赞':'评论点赞'}"><img src="https://fixture.invalid/${c.liked?'liked.png':'ic_Icon_like_c@3x.png'}">${c.count||''}</button><button data-reply><img src="https://fixture.invalid/ic_Icon_comment_bc2f_c@3x.png"></button></div></div></div>`;}
-function detail(id){history.replaceState({},'',`/?feedDetail=${id}`);document.querySelector('.modal-root')?.remove();state.reply=null;const p=state.posts.find(p=>p.id===id);const root=document.createElement('div');root.className='modal-root';root.role='dialog';root.innerHTML=`<button class="modal-outer__close">关闭</button><div class="feed-detail"><div class="feed-detail-content"><span class="feed-header__name">${esc(p.name)}</span><div class="feed-detail-content__body"><div class="feed-rich-text">${esc(p.text)}</div></div><span class="feed-circle-tag__name">circle</span></div><div class="feed-detail-comments"><div class="comment-list">${state.comments.map(c=>comment(c)+(c.replies.length?`<div class="comment-replies">${c.replies.map(r=>comment(r,true)).join('')}</div>`:'')).join('')}<div>没有更多了</div></div></div><div class="detail-input"><button class="detail-input__box">评论 ${esc(p.name)}:</button></div></div>`;document.body.append(root);
-root.querySelector('.modal-outer__close').onclick=()=>{root.remove();history.replaceState({},'','/');};
-function editor(target){state.reply=target;root.querySelector('.detail-input').innerHTML=`<textarea class="detail-input__textarea" placeholder="${target?'回复 '+esc(target.name):'评论 '+esc(p.name)}:"></textarea><button class="detail-input__submit" disabled>发布</button>`;const ta=root.querySelector('textarea'),b=root.querySelector('.detail-input__submit');ta.oninput=()=>b.disabled=!ta.value.trim();b.onclick=()=>{state.submits++;if(state.mode==='timeout')return;const row={name:'operator',avatar:'me.png',text:ta.value,liked:false,count:0,replies:[]};if(target)target.replies.push(row);else state.comments.unshift(row);detail(id);};}
-root.querySelector('.detail-input__box').onclick=()=>editor(null);
-const quick=document.createElement('button');quick.className='detail-input__fast-comment-trigger';quick.setAttribute('aria-label','快捷评论');quick.textContent='快捷评论';root.querySelector('.detail-input').append(quick);
-quick.onclick=()=>{const old=root.querySelector('.detail-input__fast-comment-popover');if(old){old.remove();return;}const menu=document.createElement('div');menu.className='detail-input__fast-comment-popover';menu.innerHTML='<button aria-label="大笑"><img alt="大笑" src="https://fixture.invalid/laugh.gif"></button><button aria-label="点赞"><img alt="点赞" src="https://fixture.invalid/924708741062862848.gif"></button>';root.querySelector('.detail-input').append(menu);menu.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.submits++;state.lastReaction=b.getAttribute('aria-label');if(state.mode==='timeout')return;state.comments.unshift({name:'operator',avatar:'me.png',text:'',sticker:state.lastReaction==='点赞'?'924708741062862848.gif':'laugh.gif',liked:false,count:0,replies:[]});detail(id);});};
-[...root.querySelectorAll('.comment-item')].forEach((el,i)=>{const rows=state.comments.flatMap(c=>[c,...c.replies]);el.querySelector('.comment-item__content-text').classList.add('comment-item__content');if(rows[i].sticker){const img=document.createElement('img');img.src='https://fixture.invalid/'+rows[i].sticker;el.querySelector('.comment-item__content-text').append(img);}});
-let tops=[...root.querySelector('.comment-list').children].filter(e=>e.classList.contains('comment-item'));
-tops.forEach((e,i)=>{e.querySelector('[data-reply]').onclick=()=>editor(state.comments[i]);e.querySelector('[aria-label="评论点赞"],[aria-label="取消评论点赞"]').onclick=()=>{state.submits++;if(state.mode==='timeout')return;state.comments[i].liked=!state.comments[i].liked;state.comments[i].count+=state.comments[i].liked?1:-1;detail(id);};});
-}
-function publish(){main.innerHTML=`<div class="publish-composer"><div class="publish-editor__content" contenteditable="true"></div><button class="publish-circle-picker__button">circle</button><button class="publish-statement__entry">${state.statement}</button><button class="publish-submit-bar__button" disabled>发布</button></div>`;const ed=main.querySelector('[contenteditable]'),b=main.querySelector('.publish-submit-bar__button');ed.oninput=()=>b.disabled=!ed.innerText.trim();main.querySelector('.publish-statement__entry').onclick=()=>{let panel=document.createElement('ul');panel.innerHTML=['无需声明','内容由AI生成'].map(t=>`<li class="statement-dropdown__item" role="option">${t}</li>`).join('');main.append(panel);panel.querySelectorAll('li').forEach(e=>e.onclick=()=>{state.statement=e.innerText;main.querySelector('.publish-statement__entry').innerText=state.statement;panel.remove();});};b.onclick=()=>{state.submits++;if(state.mode==='timeout')return;state.posts.unshift({id:String(1000+state.submits),name:'operator',avatar:'me.png',text:ed.innerText});history.pushState({},'','/');home();};}
-document.querySelectorAll('a.nav-item').forEach(a=>a.onclick=e=>{e.preventDefault();history.pushState({},'',a.getAttribute('href'));a.getAttribute('href')==='/publish'?publish():home();});
-home();
+  // 离线页面夹具：在隔离浏览器上下文中拦截所有请求。
+  const esc = (x) =>
+    String(x)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  const state = {
+    comments: [
+      {
+        name: "reader",
+        avatar: "reader.png",
+        text: "测试目标评论",
+        liked: false,
+        count: 0,
+        replies: [],
+      },
+    ],
+    posts: [
+      { id: "123", name: "author", avatar: "author.png", text: "测试帖子" },
+    ],
+    statement: "添加内容类型声明",
+    reply: null,
+    mode: "normal",
+    submits: 0,
+  };
+  window.fixture = state;
+  const main = document.querySelector("main");
+  function card(p) {
+    return `<div data-feed-id="${p.id}"><div class="feed-card"><div class="feed-header"><span class="feed-header__name">${esc(p.name)}</span><img class="feed-header__avatar" src="https://fixture.invalid/${p.avatar}"><span class="feed-header__meta">刚刚</span></div><div class="feed-card__body"><div class="feed-rich-text">${esc(p.text)}</div></div><div class="feed-footer__actions"><button data-open="${p.id}"><img alt="评论"></button></div></div></div>`;
+  }
+  function home() {
+    main.innerHTML = `<button class="main-header__tab--active">圈子</button><button class="main-header__circle--active"><span class="main-header__circle-name">circle</span></button><h3 class="circle-info-card__name">circle</h3><button class="circle-tab__sort">新发</button><div class="feed-list">${state.posts.map(card).join("")}</div>`;
+    main
+      .querySelectorAll("[data-open]")
+      .forEach((b) => (b.onclick = () => detail(b.dataset.open)));
+  }
+  function comment(c, isReply = false) {
+    return `<div class="comment-item"><img class="comment-item__avatar" src="https://fixture.invalid/${c.avatar}"><div class="comment-item__body"><span class="comment-item__name">${esc(c.name)}</span><span class="comment-item__time">刚刚</span><div class="comment-item__content-text"><div class="feed-rich-text">${esc(c.text)}</div></div><div class="comment-item__actions"><button aria-label="${c.liked ? "取消评论点赞" : "评论点赞"}"><img src="https://fixture.invalid/${c.liked ? "liked.png" : "ic_Icon_like_c@3x.png"}">${c.count || ""}</button><button data-reply><img src="https://fixture.invalid/ic_Icon_comment_bc2f_c@3x.png"></button></div></div></div>`;
+  }
+  function detail(id) {
+    history.replaceState({}, "", `/?feedDetail=${id}`);
+    document.querySelector(".modal-root")?.remove();
+    state.reply = null;
+    const p = state.posts.find((p) => p.id === id);
+    const root = document.createElement("div");
+    root.className = "modal-root";
+    root.role = "dialog";
+    root.innerHTML = `<button class="modal-outer__close">关闭</button><div class="feed-detail"><div class="feed-detail-content"><span class="feed-header__name">${esc(p.name)}</span><div class="feed-detail-content__body"><div class="feed-rich-text">${esc(p.text)}</div></div><span class="feed-circle-tag__name">circle</span></div><div class="feed-detail-comments"><div class="comment-list">${state.comments.map((c) => comment(c) + (c.replies.length ? `<div class="comment-replies">${c.replies.map((r) => comment(r, true)).join("")}</div>` : "")).join("")}<div>没有更多了</div></div></div><div class="detail-input"><button class="detail-input__box">评论 ${esc(p.name)}:</button></div></div>`;
+    document.body.append(root);
+    root.querySelector(".modal-outer__close").onclick = () => {
+      root.remove();
+      history.replaceState({}, "", "/");
+    };
+    function editor(target) {
+      state.reply = target;
+      root.querySelector(".detail-input").innerHTML =
+        `<textarea class="detail-input__textarea" placeholder="${target ? "回复 " + esc(target.name) : "评论 " + esc(p.name)}:"></textarea><button class="detail-input__submit" disabled>发布</button>`;
+      const ta = root.querySelector("textarea"),
+        b = root.querySelector(".detail-input__submit");
+      ta.oninput = () => (b.disabled = !ta.value.trim());
+      b.onclick = () => {
+        state.submits++;
+        if (state.mode === "timeout") return;
+        const row = {
+          name: "operator",
+          avatar: "me.png",
+          text: ta.value,
+          liked: false,
+          count: 0,
+          replies: [],
+        };
+        if (target) target.replies.push(row);
+        else state.comments.unshift(row);
+        detail(id);
+      };
+    }
+    root.querySelector(".detail-input__box").onclick = () => editor(null);
+    const quick = document.createElement("button");
+    quick.className = "detail-input__fast-comment-trigger";
+    quick.setAttribute("aria-label", "快捷评论");
+    quick.textContent = "快捷评论";
+    root.querySelector(".detail-input").append(quick);
+    quick.onclick = () => {
+      const old = root.querySelector(".detail-input__fast-comment-popover");
+      if (old) {
+        old.remove();
+        return;
+      }
+      const menu = document.createElement("div");
+      menu.className = "detail-input__fast-comment-popover";
+      menu.innerHTML =
+        '<button aria-label="大笑"><img alt="大笑" src="https://fixture.invalid/laugh.gif"></button><button aria-label="点赞"><img alt="点赞" src="https://fixture.invalid/924708741062862848.gif"></button>';
+      root.querySelector(".detail-input").append(menu);
+      menu.querySelectorAll("button").forEach(
+        (b) =>
+          (b.onclick = () => {
+            state.submits++;
+            state.lastReaction = b.getAttribute("aria-label");
+            if (state.mode === "timeout") return;
+            state.comments.unshift({
+              name: "operator",
+              avatar: "me.png",
+              text: "",
+              sticker:
+                state.lastReaction === "点赞"
+                  ? "924708741062862848.gif"
+                  : "laugh.gif",
+              liked: false,
+              count: 0,
+              replies: [],
+            });
+            detail(id);
+          }),
+      );
+    };
+    [...root.querySelectorAll(".comment-item")].forEach((el, i) => {
+      const rows = state.comments.flatMap((c) => [c, ...c.replies]);
+      el.querySelector(".comment-item__content-text").classList.add(
+        "comment-item__content",
+      );
+      if (rows[i].sticker) {
+        const img = document.createElement("img");
+        img.src = "https://fixture.invalid/" + rows[i].sticker;
+        el.querySelector(".comment-item__content-text").append(img);
+      }
+    });
+    let tops = [...root.querySelector(".comment-list").children].filter((e) =>
+      e.classList.contains("comment-item"),
+    );
+    tops.forEach((e, i) => {
+      e.querySelector("[data-reply]").onclick = () => editor(state.comments[i]);
+      e.querySelector(
+        '[aria-label="评论点赞"],[aria-label="取消评论点赞"]',
+      ).onclick = () => {
+        state.submits++;
+        if (state.mode === "timeout") return;
+        state.comments[i].liked = !state.comments[i].liked;
+        state.comments[i].count += state.comments[i].liked ? 1 : -1;
+        detail(id);
+      };
+    });
+  }
+  function publish() {
+    main.innerHTML = `<div class="publish-composer"><div class="publish-editor__content" contenteditable="true"></div><button class="publish-circle-picker__button">circle</button><button class="publish-statement__entry">${state.statement}</button><button class="publish-submit-bar__button" disabled>发布</button></div>`;
+    const ed = main.querySelector("[contenteditable]"),
+      b = main.querySelector(".publish-submit-bar__button");
+    ed.oninput = () => (b.disabled = !ed.innerText.trim());
+    main.querySelector(".publish-statement__entry").onclick = () => {
+      let panel = document.createElement("ul");
+      panel.innerHTML = ["无需声明", "内容由AI生成"]
+        .map(
+          (t) => `<li class="statement-dropdown__item" role="option">${t}</li>`,
+        )
+        .join("");
+      main.append(panel);
+      panel.querySelectorAll("li").forEach(
+        (e) =>
+          (e.onclick = () => {
+            state.statement = e.innerText;
+            main.querySelector(".publish-statement__entry").innerText =
+              state.statement;
+            panel.remove();
+          }),
+      );
+    };
+    b.onclick = () => {
+      state.submits++;
+      if (state.mode === "timeout") return;
+      state.posts.unshift({
+        id: String(1000 + state.submits),
+        name: "operator",
+        avatar: "me.png",
+        text: ed.innerText,
+      });
+      history.pushState({}, "", "/");
+      home();
+    };
+  }
+  document.querySelectorAll("a.nav-item").forEach(
+    (a) =>
+      (a.onclick = (e) => {
+        e.preventDefault();
+        history.pushState({}, "", a.getAttribute("href"));
+        a.getAttribute("href") === "/publish" ? publish() : home();
+      }),
+  );
+  home();
 </script>
